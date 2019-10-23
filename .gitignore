@@ -1,3 +1,4 @@
 .commit
 *.pyc
 venv/
+.vscode/

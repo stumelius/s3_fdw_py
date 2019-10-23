@@ -13,6 +13,12 @@ This project implements a PostgreSQL 11.1+ [foreign data wrapper (fdw)](https://
 
 ### Installing
 
+Install dependencies:
+
+```bash
+apt-get install postgresql-server-dev-11
+```
+
 Install the Python package in a virtual environment:
 
 ```bash
