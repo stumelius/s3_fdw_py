@@ -29,7 +29,7 @@ pip install -e .
 Build and start a `postgresql-multicorn` Docker container for end-to-end testing:
 
 ```bash
-docker build -t postgresql-s3-fdw .
+docker build -t postgresql-multicorn .
 docker run -e POSTGRES_USER=pytest -e POSTGRES_PASSWORD=pytest -e POSTGRES_DB=pytest -p 5432:5432 --rm -d postgresql-multicorn
 ```
 
