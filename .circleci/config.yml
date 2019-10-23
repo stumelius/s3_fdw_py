@@ -29,7 +29,8 @@ jobs:
       - run:
           name: install postgresql dependencies
           command: |
-            apt-get install postgresql-server-dev-11
+            sudo apt-get update -y
+            sudo apt-get install -y postgresql-server-dev-11
 
       - run:
           name: install python dependencies
