@@ -25,9 +25,14 @@ jobs:
             - v1-dependencies-{{ checksum "requirements.txt" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
+      
+      - run:
+          name: install postgresql dependencies
+          command: |
+            apt-get install postgresql-server-dev-11
 
       - run:
-          name: install dependencies
+          name: install python dependencies
           command: |
             python3 -m venv venv
             . venv/bin/activate
