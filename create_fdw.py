@@ -1,11 +1,13 @@
 import logging
 from sqlalchemy import create_engine
 from sqlalchemy.exc import ProgrammingError
+from sqlalchemy_fdw import ForeignDataWrapper
 from s3_fdw import S3Fdw
 logger = logging.getLogger('s3_fdw_py')
 
 if __name__ == '__main__':
-    engine = create_engine('postgresql://pytest:pytest@localhost:5432/pytest')
+    url = 'postgresql://pytest:pytest@localhost:5432/pytest'
+    engine = create_engine(url)
     with engine.connect() as con:
         try:
             con.execute('CREATE EXTENSION multicorn;')

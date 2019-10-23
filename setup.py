@@ -15,7 +15,7 @@ setup(
         'multicorn'
     ],
     extras_require={
-        'test': [],
+        'test': ['pytest'],
     },
     scripts=[],
 )

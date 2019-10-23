@@ -40,7 +40,6 @@ docker run -e POSTGRES_USER=pytest -e POSTGRES_PASSWORD=pytest -e POSTGRES_DB=py
 ```
 
 Run the test suite:
-
 ```bash
 pytest
 ```
