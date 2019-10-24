@@ -11,11 +11,7 @@ setup(
     author_email='simo.tumelius@gmail.com',
     license='TBD',
     packages=find_packages(),
-    install_requires=[
-        'multicorn'
-    ],
-    extras_require={
-        'test': ['pytest'],
-    },
+    install_requires=['multicorn'],
+    extras_require={'test': ['pytest']},
     scripts=[],
 )

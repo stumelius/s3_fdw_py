@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy_fdw import ForeignDataWrapper
 from s3_fdw import S3Fdw
+
 logger = logging.getLogger('s3_fdw_py')
 
 if __name__ == '__main__':

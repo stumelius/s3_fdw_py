@@ -14,7 +14,12 @@ def fdw_fixture():
         except ProgrammingError as e:
             pass
     metadata = MetaData(bind=engine)
-    fdw = ForeignDataWrapper('s3_fdw_srv', 'multicorn', metadata=metadata, options={'wrapper': 's3_fdw.S3Fdw'})
+    fdw = ForeignDataWrapper(
+        's3_fdw_srv',
+        'multicorn',
+        metadata=metadata,
+        options={'wrapper': 's3_fdw.S3Fdw'},
+    )
     fdw.create(checkfirst=True)
     yield fdw
     fdw.drop(checkfirst=True)
