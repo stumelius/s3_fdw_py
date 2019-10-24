@@ -15,7 +15,9 @@ This project implements a PostgreSQL 11.1+ [foreign data wrapper (fdw)](https://
 
 ### Installing
 
-Install dependencies:
+
+
+Install dependencies (may require [PostgreSQL Apt Repository](https://www.postgresql.org/download/linux/ubuntu/)):
 
 ```bash
 apt-get install postgresql-server-dev-11
@@ -39,6 +41,12 @@ Build and start a `postgresql-multicorn` Docker container for end-to-end testing
 ```bash
 docker build -t postgresql-multicorn .
 docker run -e POSTGRES_USER=pytest -e POSTGRES_PASSWORD=pytest -e POSTGRES_DB=pytest -p 5432:5432 --rm -d postgresql-multicorn
+```
+
+Or alternatively, use a pre-built image from [Docker Hub](https://cloud.docker.com/repository/docker/smomni/postgresql-multicorn):
+
+```bash
+docker run -e POSTGRES_USER=pytest -e POSTGRES_PASSWORD=pytest -e POSTGRES_DB=pytest -p 5432:5432 --rm -d smomni/postgresql-multicorn:latest
 ```
 
 Run the test suite:

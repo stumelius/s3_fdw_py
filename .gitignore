@@ -2,3 +2,4 @@
 *.pyc
 venv/
 .vscode/
+s3_fdw.egg-info/
