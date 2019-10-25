@@ -1,15 +1,57 @@
 import logging
+import pytest
 import multicorn.utils
 from unittest.mock import patch
 from s3_fdw import S3ForeignDataWrapper
 
+VALID_OPTIONS = {
+    'object_name': 'pytest.csv',
+    'bucket_name': 'pytest',
+    'access_key': 'pytest-access',
+    'secret_key': 'pytest-secret',
+}
 
-def test_s3_fdw_parses_object_name_from_options():
-    s3_fdw = S3ForeignDataWrapper(options={'object_name': 'pytest'}, columns={})
-    assert s3_fdw.object_name == 'pytest'
+
+def get_keys(*args):
+    return {key: VALID_OPTIONS[key] for key in args}
+
+
+def test_s3_fdw_creates_attributes_from_options_keys():
+    options = VALID_OPTIONS
+    s3_fdw = S3ForeignDataWrapper(options=VALID_OPTIONS, columns={})
+    for key, value in options.items():
+        assert getattr(s3_fdw, key) == value
 
 
 @patch('multicorn.utils.log_to_postgres')
-def test_s3_fdw_logs_error_to_postgres_if_no_object_name_in_options(log_to_postgres):
-    s3_fdw = S3ForeignDataWrapper(options={}, columns={})
-    log_to_postgres.assert_called_once_with('object_name required', logging.ERROR)
+@pytest.mark.parametrize(
+    'options,error_messages',
+    [
+        (
+            {},
+            [
+                'object_name required',
+                'bucket_name required',
+                'access_key required',
+                'secret_key required',
+            ],
+        ),
+        (
+            get_keys('object_name'),
+            ['bucket_name required', 'access_key required', 'secret_key required'],
+        ),
+        (
+            get_keys('object_name', 'bucket_name'),
+            ['access_key required', 'secret_key required'],
+        ),
+        (get_keys('object_name', 'bucket_name', 'access_key'), ['secret_key required']),
+        (get_keys('object_name', 'bucket_name', 'access_key', 'secret_key'), []),
+    ],
+)
+def test_s3_fdw_logs_error_to_postgres_if_invalid_options(
+    log_to_postgres, options, error_messages
+):
+    s3_fdw = S3ForeignDataWrapper(options=options, columns={})
+    assert log_to_postgres.call_count == len(error_messages)
+    for error_message in error_messages:
+        log_to_postgres.assert_any_call(error_message, logging.ERROR)
