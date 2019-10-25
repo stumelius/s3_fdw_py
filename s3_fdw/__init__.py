@@ -2,10 +2,9 @@ import logging
 import boto3
 import multicorn.utils
 import csv
-import pandas as pd
 from typing import List
 from multicorn import ForeignDataWrapper
-from io import BytesIO
+from io import BytesIO, StringIO
 
 __version__ = '0.1.0'
 
@@ -56,8 +55,10 @@ class S3ForeignDataWrapper(ForeignDataWrapper):
         byte_stream = BytesIO()
         s3_object.download_fileobj(byte_stream)
         byte_stream.seek(0)
-        # FIXME: pandas.errors.ParserError: Error tokenizing data. C error: out of memory
-        reader = pd.read_csv(byte_stream, chunksize=200)
-        for chunk in reader:
-            for index, row in chunk[self.columns].iterrows():
-                yield row.tolist()
+        stream = StringIO(byte_stream.read().decode())
+        for i, row in enumerate(csv.reader(stream)):
+            if i == 0:
+                header = row
+            else:
+                row_dict = {key: value for key, value in zip(header, row)}
+                yield [row_dict[col] for col in self.columns]

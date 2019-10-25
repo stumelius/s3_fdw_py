@@ -61,7 +61,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            pytest
+            pytest -m "not skip_ci"
 
       - store_artifacts:
           path: test-reports

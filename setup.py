@@ -23,7 +23,7 @@ setup(
     author_email='simo.tumelius@gmail.com',
     license='TBD',
     packages=find_packages(),
-    install_requires=['multicorn', 'boto3', 'pandas'],
+    install_requires=['multicorn', 'boto3'],
     extras_require={'test': ['pytest', 'pytest-helpers-namespace', 'black']},
     scripts=[],
 )

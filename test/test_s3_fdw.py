@@ -77,11 +77,11 @@ def test_s3_fdw_execute_infers_csv_delimiter_and_yields_rows(
     s3_fdw = S3ForeignDataWrapper(options=options, columns=['a', 'b', 'c'])
     rows = list(s3_fdw.execute(quals={}, columns={}))
     assert len(rows) == 1
-    assert rows[0] == [1, 2, 3]
+    assert rows[0] == ['1', '2', '3']
 
 
-@pytest.mark.skip(
-    'pandas.errors.ParserError: Error tokenizing data. C error: out of memory'
+@pytest.mark.skip_ci(
+    'Networking issues between postgres and minio containers in CircleCI'
 )
 def test_s3_fdw_end_to_end(options_fixture, s3_fixture, sqlalchemy_fdw_fixture):
     from sqlalchemy_fdw import ForeignTable
@@ -90,10 +90,10 @@ def test_s3_fdw_end_to_end(options_fixture, s3_fixture, sqlalchemy_fdw_fixture):
     options = options_fixture
     options['endpoint_url'] = 'http://minio:9000'
     metadata = sqlalchemy_fdw_fixture.metadata
-    s3_bucket = s3_fixture.Bucket('pytest')
+    engine = metadata.bind
+    s3_bucket = s3_fixture.Bucket(options['bucket_name'])
     data = b'a,b,c\n1,2,3'
-    object_name = options['object_name']
-    s3_object = s3_bucket.put_object(Body=data, Key=object_name)
+    s3_object = s3_bucket.put_object(Body=data, Key=options['object_name'])
     table_name = 'foreign_table'
     foreign_table = ForeignTable(
         table_name,
@@ -106,15 +106,19 @@ def test_s3_fdw_end_to_end(options_fixture, s3_fixture, sqlalchemy_fdw_fixture):
     )
     foreign_table.create(checkfirst=True)
     try:
-        url = 'postgresql://pytest:pytest@localhost:5432/pytest'
-        engine = create_engine(url)
         with engine.connect() as con:
-            rows = con.execute(
-                'SELECT * FROM {table_name} LIMIT 5'.format(table_name=table_name)
+            rows = list(
+                con.execute('SELECT * FROM {table_name}'.format(table_name=table_name))
             )
-            for row in rows:
-                print(row)
+            assert len(rows) == 1
+            assert rows[0] == (1, 2, 3)
+
+            rows = list(
+                con.execute(
+                    'SELECT a,b FROM {table_name}'.format(table_name=table_name)
+                )
+            )
+            assert len(rows) == 1
+            assert rows[0] == (1, 2)
     finally:
         foreign_table.drop(checkfirst=True)
-    # with sqlalchemy_fdw_fixture.metadata.bind.connect() as con:
-    #    con.execute()
