@@ -1,8 +1,5 @@
-appdirs==1.4.3
 atomicwrites==1.3.0
 attrs==19.3.0
-black==19.3b0
-Click==7.0
 importlib-metadata==0.23
 more-itertools==7.2.0
 packaging==19.2
@@ -14,7 +11,6 @@ pytest==5.2.1
 six==1.12.0
 SQLAlchemy==1.3.10
 sqlalchemy-fdw==0.3.0
-toml==0.10.0
 wcwidth==0.1.7
 zipp==0.6.0
 git+git://github.com/Kozea/Multicorn.git@master#9ff78759665b0d04315f707b81a45c66ecb2d8c7

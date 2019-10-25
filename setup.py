@@ -12,6 +12,6 @@ setup(
     license='TBD',
     packages=find_packages(),
     install_requires=['multicorn'],
-    extras_require={'test': ['pytest']},
+    extras_require={'test': ['pytest', 'black']},
     scripts=[],
 )
