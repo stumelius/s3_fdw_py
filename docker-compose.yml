@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+
+  postgres:
+    image: smomni/postgresql-multicorn:latest
+    environment:
+      - POSTGRES_USER=pytest
+      - POSTGRES_PASSWORD=pytest
+      - POSTGRES_DB=pytest
+    ports:
+      - 5432:5432
+    command: -c 'shared_buffers=128MB'
+
+  minio:
+    image: minio/minio
+    environment:
+      - MINIO_ACCESS_KEY=pytest123
+      - MINIO_SECRET_KEY=pytest123
+    ports:
+      - 9000:9000
+    command: server /data

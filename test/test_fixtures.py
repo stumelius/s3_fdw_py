@@ -1,5 +1,5 @@
-def test_fdw_fixture_creates_fdw_server(fdw_fixture):
-    with fdw_fixture.metadata.bind.connect() as con:
+def test_sqlalchemy_fdw_fixture_creates_fdw_server(sqlalchemy_fdw_fixture):
+    with sqlalchemy_fdw_fixture.metadata.bind.connect() as con:
         rows = list(
             con.execute(
                 """
@@ -15,7 +15,7 @@ def test_fdw_fixture_creates_fdw_server(fdw_fixture):
         )
         assert len(rows) == 1
         server_name = rows[0][0]
-        assert server_name == fdw_fixture.name
+        assert server_name == sqlalchemy_fdw_fixture.name
 
 
 def test_s3_fixture_creates_pytest_bucket(s3_fixture):

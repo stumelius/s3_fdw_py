@@ -24,6 +24,6 @@ setup(
     license='TBD',
     packages=find_packages(),
     install_requires=['multicorn', 'boto3', 'pandas'],
-    extras_require={'test': ['pytest', 'black']},
+    extras_require={'test': ['pytest', 'pytest-helpers-namespace', 'black']},
     scripts=[],
 )

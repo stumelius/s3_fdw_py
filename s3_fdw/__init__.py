@@ -50,11 +50,14 @@ class S3ForeignDataWrapper(ForeignDataWrapper):
             aws_secret_access_key=self.secret_key,
         )
         s3_bucket = s3.Bucket(name=self.bucket_name)
+        # TODO: Raise error if object not found
         s3_object = s3_bucket.Object(key=self.object_name)
 
         byte_stream = BytesIO()
         s3_object.download_fileobj(byte_stream)
         byte_stream.seek(0)
-        df = pd.read_csv(byte_stream)
-        for index, row in df[self.columns].iterrows():
-            yield row.tolist()
+        # FIXME: pandas.errors.ParserError: Error tokenizing data. C error: out of memory
+        reader = pd.read_csv(byte_stream, chunksize=200)
+        for chunk in reader:
+            for index, row in chunk[self.columns].iterrows():
+                yield row.tolist()

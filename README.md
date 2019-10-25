@@ -36,15 +36,13 @@ pip install -e .
 
 ### Running the tests
 
-Start `postgresql-multicorn` and `minio` Docker containers for end-to-end testing:
+(Optional) Build `smomni/postgresql-multicorn:latest` image:
 
 ```bash
-docker build -t postgresql-multicorn .
-docker run -e POSTGRES_USER=pytest -e POSTGRES_PASSWORD=pytest -e POSTGRES_DB=pytest -p 5432:5432 --rm -d postgresql-multicorn
-docker run -e "MINIO_ACCESS_KEY=pytest123" -e "MINIO_SECRET_KEY=pytest123" -d -p 9000:9000 --rm minio/minio server /data
+docker build -t smomni/postgresql-multicorn:latest .
 ```
 
-Or alternatively, use a pre-built image from [Docker Hub](https://cloud.docker.com/repository/docker/smomni/postgresql-multicorn):
+Start `postgresql-multicorn` and `minio` Docker containers for end-to-end testing:
 
 ```bash
 docker run -e POSTGRES_USER=pytest -e POSTGRES_PASSWORD=pytest -e POSTGRES_DB=pytest -p 5432:5432 --rm -d smomni/postgresql-multicorn:latest
@@ -52,6 +50,7 @@ docker run -e "MINIO_ACCESS_KEY=pytest123" -e "MINIO_SECRET_KEY=pytest123" -d -p
 ```
 
 Run the test suite:
+
 ```bash
 pytest
 ```
