@@ -16,3 +16,9 @@ def test_fdw_fixture_creates_fdw_server(fdw_fixture):
         assert len(rows) == 1
         server_name = rows[0][0]
         assert server_name == fdw_fixture.name
+
+
+def test_s3_fixture_creates_pytest_bucket(s3_fixture):
+    buckets = list(s3_fixture.buckets.all())
+    assert len(buckets) == 1
+    assert buckets[0].name == 'pytest'

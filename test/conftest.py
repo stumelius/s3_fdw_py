@@ -1,4 +1,5 @@
 import pytest
+import boto3
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.exc import ProgrammingError
 from sqlalchemy_fdw import ForeignDataWrapper
@@ -23,3 +24,17 @@ def fdw_fixture():
     fdw.create(checkfirst=True)
     yield fdw
     fdw.drop(checkfirst=True)
+
+
+@pytest.fixture
+def s3_fixture():
+    s3 = boto3.resource(
+        's3',
+        endpoint_url='http://localhost:9000',
+        aws_access_key_id='pytest123',
+        aws_secret_access_key='pytest123',
+    )
+    bucket = s3.create_bucket(Bucket='pytest')
+    yield s3
+    bucket.objects.all().delete()
+    bucket.delete()
